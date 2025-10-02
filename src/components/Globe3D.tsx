@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Sphere, Stars } from '@react-three/drei';
+import { OrbitControls, Sphere, Stars, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { MapPin } from 'lucide-react';
+import earthTexture from '@/assets/earth-texture.jpg';
 
 interface Globe3DProps {
   targetLocation?: { lat: number; lng: number; name: string };
@@ -16,6 +17,7 @@ function Globe({ targetLocation, onAnimationComplete, showPin }: Omit<Globe3DPro
   const { camera } = useThree();
   const animating = useRef(false);
   const startRotation = useRef<THREE.Euler | null>(null);
+  const texture = useTexture(earthTexture);
 
   useEffect(() => {
     if (targetLocation && !animating.current) {
@@ -69,9 +71,9 @@ function Globe({ targetLocation, onAnimationComplete, showPin }: Omit<Globe3DPro
     <>
       <Sphere ref={meshRef} args={[2, 64, 64]}>
         <meshStandardMaterial
-          color="#4a5fc1"
-          roughness={0.7}
-          metalness={0.3}
+          map={texture}
+          roughness={0.8}
+          metalness={0.2}
         />
       </Sphere>
       
